@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logarithmischer Prognose-Slider</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label, p {
+      font-size: 1rem;
+    }
+    input[type=range] {
+      width: 100%;
+    }
+    .output {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+    .input-label {
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .percent-display {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="input-label">Wähle eine Wahrscheinlichkeit (0–100 %):</p>
+    <label for="slider">Input-Wert:</label>
+    <input type="range" id="slider" min="1" max="100" value="50" />
+    <p class="percent-display">Aktuelle Wahrscheinlichkeit: <span id="percentValue">50</span>%</p>
+    <p class="output">Output: <span id="outputValue">0</span></p>
+  </div>
+
+  <script>
+    const slider = document.getElementById("slider");
+    const output = document.getElementById("outputValue");
+    const percent = document.getElementById("percentValue");
+
+    function calculateOutput(input) {
+      const inputNormalized = input / 100;
+      const base = Math.log(2);
+      const result = 100 * (Math.log(inputNormalized) - Math.log(0.5)) / base;
+      return Math.round(result);
+    }
+
+    function updateOutput() {
+      const value = parseInt(slider.value);
+      percent.innerText = value;
+      if (value <= 0) {
+        output.innerText = "-∞";
+      } else {
+        output.innerText = calculateOutput(value);
+      }
+    }
+
+    slider.addEventListener("input", updateOutput);
+    updateOutput();
+  </script>
+</body>
+</html>
